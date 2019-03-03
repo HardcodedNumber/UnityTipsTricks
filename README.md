@@ -1,2 +1,2 @@
-# UnityEditorTools
-Helpful Unity Editor Tips and Tricks
+# Unity Tips and Tricks
+Helpful Unity Tips and Tricks
