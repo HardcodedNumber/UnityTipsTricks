@@ -4,7 +4,7 @@ This repository is simply useful editor and runtime tips and tricks that have he
 # Inspector Buttons
 Generate a button in a MonoBehaviour or ScriptableObject
 
-![Example](https://i.imgur.com/zxVGkH8.gifv)
+![Example](https://i.imgur.com/zxVGkH8.gif)
 
 ## Usage
 Simply add the following attribute to any non-parameterized method.
@@ -21,8 +21,8 @@ private void CreatePlayer()
 # Required Fields
 Are you tired of people forgetting to set a field? Now make it obvious!
 
-![Example](https://i.imgur.com/lFIhs59.gifv)
-![Example](https://i.imgur.com/GUkXxYU.gifv)
+![Example](https://i.imgur.com/lFIhs59.gif)
+![Example](https://i.imgur.com/GUkXxYU.gif)
 This is the first version of Required Fields. I want to later make it a complier error so it is self evident when something isn't working. 
 
 ## Usage
