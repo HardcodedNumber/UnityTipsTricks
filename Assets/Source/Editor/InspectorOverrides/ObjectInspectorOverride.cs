@@ -7,13 +7,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Source.EditorOverride
+namespace Source.Edit
 {
     /// <summary>
     /// Draws attributes for <see cref="UnityEngine.Object"/>
     /// </summary>
     [CanEditMultipleObjects, CustomEditor(typeof(UnityEngine.Object), true)]
-	public sealed class ObjectAttributeDrawer : Editor
+	public sealed class ObjectInspectorOverride : Editor
 	{
 		/// <summary>
 		/// Draw the default inspector and buttons from the current type
@@ -53,7 +53,7 @@ namespace Source.EditorOverride
 				}
 			}
 		}
-
+	
 		private void DrawFieldsAndRequirements()
 		{
 			var serializeProperty = serializedObject.GetIterator();

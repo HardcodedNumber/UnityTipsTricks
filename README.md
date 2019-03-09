@@ -4,7 +4,7 @@ This repository is simply useful editor and runtime tips and tricks that have he
 # Inspector Buttons
 Generate a button in a MonoBehaviour or ScriptableObject
 
-![](https://i.imgur.com/zxVGkH8.gifv)
+![Example](https://i.imgur.com/zxVGkH8.gifv)
 
 ## Usage
 Simply add the following attribute to any non-parameterized method.
@@ -21,8 +21,8 @@ private void CreatePlayer()
 # Required Fields
 Are you tired of people forgetting to set a field? Now make it obvious!
 
-![](https://i.imgur.com/lFIhs59.gifv)
-![](https://i.imgur.com/GUkXxYU.gifv)
+![Example](https://i.imgur.com/lFIhs59.gifv)
+![Example](https://i.imgur.com/GUkXxYU.gifv)
 This is the first version of Required Fields. I want to later make it a complier error so it is self evident when something isn't working. 
 
 ## Usage
@@ -36,3 +36,9 @@ using Source.Runtime.Core;
         private Player _player = null;
     }
 ```
+
+# Copy Full Path
+In the Project window, copy the full directory path to the clipboard.
+
+## Usage
+Project Window, right click any asset or folder under the Assets folder.

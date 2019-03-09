@@ -211,8 +211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 586afa291bf3d4e55b9df1b04c278668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ringRadius: 5
-  _ringCount: 31
   _gun: {fileID: 4847219953001261028}
   _secondaryGun: {fileID: 301637992910575012}
 --- !u!1 &4035224877181252709
