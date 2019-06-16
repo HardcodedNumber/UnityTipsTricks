@@ -1,0 +1,12 @@
+{
+    "name": "Source.Runtime.Examples",
+    "references": ["Source.Runtime.Core"],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}

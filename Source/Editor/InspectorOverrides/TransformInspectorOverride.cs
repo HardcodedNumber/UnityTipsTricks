@@ -11,7 +11,7 @@ namespace Source.Edit.InspectorOverride
     [CanEditMultipleObjects, CustomEditor(typeof(Transform), true)]
     public sealed class TransformInspectorOverride : Editor
     {
-        private const int MaxResetButtonWidth = 40;
+        private const int MaxResetButtonWidth = 20;
 
         private SerializedProperty _localPosition;
         private SerializedProperty _localRotation;
@@ -29,7 +29,7 @@ namespace Source.Edit.InspectorOverride
            using (var group = new EditorGUILayout.HorizontalScope()) {
                 EditorGUILayout.PropertyField(_localPosition);
 
-                if (GUILayout.Button("Reset", GUILayout.MaxWidth(MaxResetButtonWidth))) {
+                if (GUILayout.Button("R", GUILayout.MaxWidth(MaxResetButtonWidth))) {
                     _localPosition.vector3Value = Vector3.zero;
                 }
            }
@@ -40,7 +40,7 @@ namespace Source.Edit.InspectorOverride
                 euler = EditorGUILayout.Vector3Field("Local Rotation", euler);
                 _localRotation.quaternionValue = Quaternion.Euler(euler);
 
-                if (GUILayout.Button("Reset", GUILayout.MaxWidth(MaxResetButtonWidth))) {
+                if (GUILayout.Button("R", GUILayout.MaxWidth(MaxResetButtonWidth))) {
                     _localRotation.quaternionValue = Quaternion.identity;
                 }
            }
@@ -48,14 +48,14 @@ namespace Source.Edit.InspectorOverride
            using (var group = new EditorGUILayout.HorizontalScope()) {
                 EditorGUILayout.PropertyField(_localScale);
 
-                if (GUILayout.Button("Reset", GUILayout.MaxWidth(MaxResetButtonWidth))) {
+                if (GUILayout.Button("R", GUILayout.MaxWidth(MaxResetButtonWidth))) {
                     _localScale.vector3Value = Vector3.one;
                 }
            }
 
             EditorGUILayout.Space();
 
-            if (GUILayout.Button("Reset Transfrom")) {
+            if (GUILayout.Button("Reset Transform")) {
                 _localPosition.vector3Value = Vector3.zero;
                 _localRotation.quaternionValue = Quaternion.identity;
                 _localScale.vector3Value = Vector3.one;

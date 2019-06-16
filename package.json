@@ -1,0 +1,14 @@
+{
+    "name": "com.hectorllanos.unitytipsandtricks",
+    "displayName": "Unity Tips and Tricks",
+    "version": "0.0.1",
+    "unity": "2019.1",
+    "description": "Simple useful editor and runtime tips and tricks ",
+    "keywords": [
+        "unity",
+        "editor",
+        "runtime",
+        "tips"
+    ],
+    "category": "Unity"
+}
