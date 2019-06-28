@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace Source.Edit
 {
@@ -13,53 +12,54 @@ namespace Source.Edit
     /// Draws attributes for <see cref="UnityEngine.Object"/>
     /// </summary>
     [CanEditMultipleObjects, CustomEditor(typeof(UnityEngine.Object), true)]
-	public sealed class ObjectInspectorOverride : Editor
-	{
-		/// <summary>
-		/// Draw the default inspector and buttons from the current type
-		/// </summary>
-		public override void OnInspectorGUI()
-		{
-			DrawFieldsAndRequirements();
-			DrawButtonAttributes();
-		}
+    public sealed class ObjectInspectorOverride : Editor
+    {
+        /// <summary>
+        /// Draw the default inspector and buttons from the current type
+        /// </summary>
+        public override void OnInspectorGUI()
+        {
+            DrawFieldsAndRequirements();
+            DrawButtonAttributes();
+        }
 
-		/// <summary>
-		/// Find all the <see cref="ButtonAttribute"/> for a given type and draw them
-		/// </summary>
-		private void DrawButtonAttributes()
-		{
-			var methods = target.GetType()
-				.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-				.Where(method => method.GetParameters().Length == 0);
+        /// <summary>
+        /// Find all the <see cref="ButtonAttribute"/> for a given type and draw them
+        /// </summary>
+        private void DrawButtonAttributes()
+        {
+            var methods = target.GetType()
+                .GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(method => method.GetParameters().Length == 0);
 
-			foreach (var method in methods) {
-				var buttonAttribute = (ButtonAttribute)Attribute.GetCustomAttribute(method, typeof(ButtonAttribute));
+            foreach (var method in methods) {
+                var buttonAttribute = (ButtonAttribute)Attribute.GetCustomAttribute(method, typeof(ButtonAttribute));
 
-				if (buttonAttribute != null) {
-					GUILayout.Space(buttonAttribute.PixelSpacing);
+                if (buttonAttribute != null) {
+                    GUILayout.Space(buttonAttribute.PixelSpacing);
 
-					var buttonName = buttonAttribute.ButtonName;
+                    var buttonName = buttonAttribute.ButtonName;
 
-					if (string.IsNullOrEmpty(buttonName)) {
-						buttonName = Regex.Replace(method.Name, "([a-z])([A-Z])", "$1 $2");
-					}
-					
-					if (GUILayout.Button(buttonName)) {
-						foreach (var t in targets) {
-							method.Invoke(t, null);
-						}
-					}
-				}
-			}
-		}
-	
-		private void DrawFieldsAndRequirements()
-		{
-			var serializeProperty = serializedObject.GetIterator();
+                    if (string.IsNullOrEmpty(buttonName)) {
+                        buttonName = Regex.Replace(method.Name, "([a-z])([A-Z])", "$1 $2");
+                    }
 
-			if (serializeProperty.NextVisible(true)) {
-				do {
+                    if (GUILayout.Button(buttonName)) {
+                        foreach (var t in targets) {
+                            method.Invoke(t, null);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void DrawFieldsAndRequirements()
+        {
+            EditorGUI.BeginChangeCheck();
+            var serializeProperty = serializedObject.GetIterator();
+
+            if (serializeProperty.NextVisible(true)) {
+                do {
                     var fieldInfo = target.GetType().GetField(serializeProperty.name,
                         BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
@@ -69,12 +69,19 @@ namespace Source.Edit
                         var enumFlagField = (EnumFlagAttribute)fieldInfo.GetCustomAttribute(typeof(EnumFlagAttribute));
 
                         if (readOnlyField != null) {
-                            using (var horizontalGroup = new EditorGUILayout.HorizontalScope()) {
-                                var label = serializeProperty.displayName;
-                                var text = serializeProperty.stringValue;
+                            if (!serializeProperty.isArray) {
+                                using (var horizontalGroup = new EditorGUILayout.HorizontalScope()) {
+                                    var label = serializeProperty.displayName;
+                                    var text = serializeProperty.stringValue;
 
-                                EditorGUILayout.LabelField(label, GUILayout.Width(EditorGUIUtility.labelWidth - 4));
-                                EditorGUILayout.SelectableLabel(text, EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                                    EditorGUILayout.LabelField(label, GUILayout.Width(EditorGUIUtility.labelWidth - 4));
+                                    EditorGUILayout.SelectableLabel(text, EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                                }
+                            }
+                            else {
+                                GUI.enabled = false;
+                                EditorGUILayout.PropertyField(serializeProperty, true);
+                                GUI.enabled = true;
                             }
                         }
                         else if (enumFlagField != null) {
@@ -100,11 +107,13 @@ namespace Source.Edit
                         EditorGUILayout.PropertyField(serializeProperty, true);
                         EditorGUILayout.Space();
                     }
-				}
-				while (serializeProperty.NextVisible(false));
-			}
-		
-			serializedObject.ApplyModifiedProperties();
-		}
-	}
+                }
+                while (serializeProperty.NextVisible(false));
+            }
+
+            if (EditorGUI.EndChangeCheck()) {
+                serializedObject.ApplyModifiedProperties();
+            }
+        }
+    }
 }

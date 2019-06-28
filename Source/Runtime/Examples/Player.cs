@@ -1,12 +1,11 @@
-﻿using System;
-using Source.Runtime.Core;
+﻿using Source.Runtime.Core;
 using UnityEngine;
 
 namespace Source.Runtime.Examples
 {
     /// <summary>
-    /// Example class to demonstrate how <see cref="Source.Runtime.Core.ButtonAttribute"> 
-    /// and <see cref="Source.Runtime.Core.RequiredFieldAttribute"> are used
+    /// Example class to demonstrate how <see cref="ButtonAttribute"> 
+    /// and <see cref="RequiredFieldAttribute"> are used
     /// </summary>
     public sealed class Player : MonoBehaviour
     {
