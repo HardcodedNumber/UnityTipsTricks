@@ -60,24 +60,46 @@ namespace Source.Edit
 
 			if (serializeProperty.NextVisible(true)) {
 				do {
-					EditorGUILayout.PropertyField(serializeProperty, true);
-					var fieldInfo = target.GetType().GetField(serializeProperty.name, 
-						BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                    var fieldInfo = target.GetType().GetField(serializeProperty.name,
+                        BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
-					if (fieldInfo != null) {
-						var requiredField = (RequiredFieldAttribute)fieldInfo.GetCustomAttribute(typeof(RequiredFieldAttribute));
+                    if (fieldInfo != null) {
+                        var requiredField = (RequiredFieldAttribute)fieldInfo.GetCustomAttribute(typeof(RequiredFieldAttribute));
+                        var readOnlyField = (ReadOnlyAttribute)fieldInfo.GetCustomAttribute(typeof(ReadOnlyAttribute));
+                        var enumFlagField = (EnumFlagAttribute)fieldInfo.GetCustomAttribute(typeof(EnumFlagAttribute));
 
-						if (requiredField != null && serializeProperty.objectReferenceValue == null) {
-							var isMandatory = requiredField.RequiredType == RequiredFieldType.Mandatory;
-							var messageType = isMandatory ? MessageType.Error : MessageType.Warning;
-							var message = $"{serializeProperty.displayName} {(isMandatory ? "must" : "should")} be assigned!";
+                        if (readOnlyField != null) {
+                            using (var horizontalGroup = new EditorGUILayout.HorizontalScope()) {
+                                var label = serializeProperty.displayName;
+                                var text = serializeProperty.stringValue;
 
-							if (!string.IsNullOrEmpty(requiredField.CustomMessage))
-								message = requiredField.CustomMessage;
+                                EditorGUILayout.LabelField(label, GUILayout.Width(EditorGUIUtility.labelWidth - 4));
+                                EditorGUILayout.SelectableLabel(text, EditorStyles.textField, GUILayout.Height(EditorGUIUtility.singleLineHeight));
+                            }
+                        }
+                        else if (enumFlagField != null) {
+                            serializeProperty.intValue = EditorGUILayout.MaskField(serializeProperty.displayName, serializeProperty.intValue, serializeProperty.enumDisplayNames);
+                        }
+                        else {
+                            EditorGUILayout.PropertyField(serializeProperty, true);
+                        }
 
-							EditorGUILayout.HelpBox(message, messageType);
-						}
-					}
+                        if (requiredField != null && serializeProperty.objectReferenceValue == null) {
+                            var isMandatory = requiredField.RequiredType == RequiredFieldType.Mandatory;
+                            var messageType = isMandatory ? MessageType.Error : MessageType.Warning;
+                            var message = $"{serializeProperty.displayName} {(isMandatory ? "must" : "should")} be assigned!";
+
+                            if (!string.IsNullOrEmpty(requiredField.CustomMessage))
+                                message = requiredField.CustomMessage;
+
+                            EditorGUILayout.HelpBox(message, messageType);
+                        }
+                    }
+                    else {
+                        //Render the script object and type
+                        EditorGUILayout.PropertyField(serializeProperty, true);
+                        EditorGUILayout.Space();
+                    }
 				}
 				while (serializeProperty.NextVisible(false));
 			}
